@@ -44,7 +44,7 @@ public class SellItemController {
         }
     }
 
-    @PutMapping("/change")
+    @PutMapping("/stock_change")
     public String updateItemStock(@RequestParam("item_id") Long itemId, @RequestParam("stock") Long stock, HttpServletRequest request, HttpServletResponse response){
         String email = authService.blockAccessWithOnlyToken(request);
 
@@ -54,7 +54,7 @@ public class SellItemController {
                 return "성공적으로 수정이 완료되었습니다.";
             } else {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                return "아이템을 찾을 수 없습니다.";
+                return "잘못된 접근이거나 아이템을 찾을 수 없습니다.";
             }
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

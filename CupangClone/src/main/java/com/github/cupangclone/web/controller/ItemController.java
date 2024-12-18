@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,23 +30,27 @@ public class ItemController {
     private final AuthService authService;
 
     @GetMapping("/all")
-    public ResponseEntity<Message> requestAllItems(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<Message> requestAllItems(
+            @RequestParam(defaultValue = "0", name = "page") int page,
+            @RequestParam(defaultValue = "5", name = "size")int size,
+            HttpServletRequest request) {
 
+        String email = authService.blockAccessWithOnlyToken(request);
 
-        try {
+        if ( email != null ) {
 
-            String email = authService.blockAccessWithOnlyToken(request);
+            Page<ItemsResponse> result = itemService.getAllItems(page, size);
+            List<ItemsResponse> allItems = result.getContent();
 
-            List<ItemsResponse> allItems = itemService.getAllItems();
             return new SuccessResponse().getMessageResponseEntity(allItems);
 
-        } catch (Exception e){
+        } else {
             return new NotAcceptResponse().sendMessage("잘못된 접근입니다.");
         }
 
     }
 
-    @GetMapping("/search")
+    @GetMapping("/found_items")
     public ResponseEntity<Message> requestFoundItems(@RequestParam("item_id") Long itemId, HttpServletRequest request, HttpServletResponse response) {
 
         String email = authService.blockAccessWithOnlyToken(request);

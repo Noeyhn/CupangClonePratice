@@ -19,6 +19,7 @@ public class SignController {
 
     @PostMapping("/register")
     public String registerUser(@RequestBody SignUpRequest signUpRequest, HttpServletResponse response) {
+        // 일반 유저페이지에서 가입시 유저 권한 설정
         signUpRequest.setSeller(false);
         boolean isSuccess = authService.createUser(response, signUpRequest);
         return isSuccess ? "회원가입에 성공하였습니다." : "회원가입에 실패하였습니다.";
@@ -26,6 +27,7 @@ public class SignController {
 
     @PostMapping("/seller/register")
     public String registerSeller(@RequestBody SignUpRequest signUpRequest, HttpServletResponse response) {
+        // seller 페이지에서 가입시 seller 권한 설정
         signUpRequest.setSeller(true);
         boolean isSuccess = authService.createUser(response, signUpRequest);
         return isSuccess ? "판매자 회원가입에 성공하였습니다." : "판매자 회원가입에 실패하였습니다.";

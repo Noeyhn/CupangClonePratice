@@ -7,9 +7,10 @@ import com.github.cupangclone.repository.userPrincipal.UserPrincipalRepository;
 import com.github.cupangclone.web.dto.items.ItemsResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,15 +21,15 @@ public class ItemService {
     private final ItemsRepository itemsRepository;
     private final UserPrincipalRepository userPrincipalRepository;
 
-    public List<ItemsResponse> getAllItems() {
+    public Page<ItemsResponse> getAllItems(int page, int size) {
 
-        List<Items> foundedAllItems = itemsRepository.findAll();
+        PageRequest pageRequest = PageRequest.of(page, size);
 
-        return foundedAllItems
-                .stream()
+        Page<Items> pageItems = itemsRepository.findAll(pageRequest);
+
+        return pageItems
                 .map(items
-                        -> ItemsResponse.fromItem(items, items.getUserPrincipal()))
-                .toList();
+                        -> ItemsResponse.fromItem(items, items.getUserPrincipal()));
 
     }
 

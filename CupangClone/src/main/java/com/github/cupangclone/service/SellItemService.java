@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -72,13 +73,19 @@ public class SellItemService {
                 .orElseThrow( () -> new NotFoundException("유저 정보에 오류가 있습니다.") );
 
         Optional<Items> item = itemsRepository.findById(itemId);
-        if ( item.isPresent() ) {
+
+        // 아이템에 등록된 유저 정보와 토큰으로 받아온 유저 정보 확인
+        if ( item.isPresent() && Objects.equals(item.get().getUserPrincipal().getEmail(), email)) {
+
             Items itemEntity = item.get();
             itemEntity.setItemStock(stock);
             itemsRepository.save(itemEntity);
             return true;
+
         } else {
+
             return false;
+
         }
 
     }
