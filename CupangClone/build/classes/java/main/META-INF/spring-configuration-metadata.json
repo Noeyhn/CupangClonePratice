@@ -40,7 +40,8 @@
     {
       "name": "spring.data.redis.port",
       "type": "java.lang.Integer",
-      "sourceType": "com.github.cupangclone.properties.RedisProperties"
+      "sourceType": "com.github.cupangclone.properties.RedisProperties",
+      "defaultValue": 0
     }
   ],
   "hints": []
