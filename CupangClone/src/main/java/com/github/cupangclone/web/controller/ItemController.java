@@ -21,6 +21,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/*
+    TODO LIST : item 판매량, 등록일자, 가격순 등등 정렬기능 구현
+                item option 기능 구현[추가 옵션(선택 자유) 및 메인 옵션(무조건 1택), 옵션 없을 시 단일 품목]
+                item 찜 기능 구현
+                item 카테고리에 따른 DB 구현[ ex) 대 카테고리 - 중 카테고리 - 소 카테고리 ]
+                item 검색 페이지 및 상세페이지는 회원이 아니라도 접근이 가능하도록 api 접근권한 수정
+                item 전체 페이지에 관한 데이터도 넘겨주기
+*/
+
+
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/items")

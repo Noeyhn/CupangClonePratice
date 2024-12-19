@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/*
+    TODO LIST : 유저 구매 등급 설정
+                구매 등급에 따른 유저별 혜택 설정
+ */
+
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor

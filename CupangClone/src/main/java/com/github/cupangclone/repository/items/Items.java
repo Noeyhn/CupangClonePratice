@@ -4,6 +4,10 @@ import com.github.cupangclone.repository.userPrincipal.UserPrincipal;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -36,5 +40,15 @@ public class Items {
     @Column(name = "item_stock")
     @ColumnDefault("'0'")
     private Long itemStock;
+
+    @Column(name = "register_at")
+    @CreationTimestamp
+    private LocalDateTime registerAt;
+
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+
 
 }
