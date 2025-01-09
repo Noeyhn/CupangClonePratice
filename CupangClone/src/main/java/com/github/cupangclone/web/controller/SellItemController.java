@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /*
-    TODO LIST : 판매 아이템 수정 로직 구현
+    TODO LIST : 판매 아이템 로직 수정
 
  */
 

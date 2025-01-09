@@ -1,7 +1,18 @@
 package com.github.cupangclone.web.controller;
 
+import com.github.cupangclone.service.AuthService;
+import com.github.cupangclone.service.CartService;
+import com.github.cupangclone.web.dto.carts.CartRequest;
+import com.github.cupangclone.web.exceptions.NotAcceptException;
+import com.github.cupangclone.web.exceptions.NotAcceptResponse;
+import com.github.cupangclone.web.exceptions.SuccessResponse;
+import com.github.cupangclone.web.exceptions.responMessage.Message;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,4 +26,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Slf4j
 public class CartController {
+
+    private final CartService cartService;
+    private final AuthService authService;
+
+    @PostMapping("/add")
+    public ResponseEntity<Message> addItemToCart(@RequestBody CartRequest cartRequest, HttpServletRequest request) {
+        String email = authService.blockAccessWithOnlyToken(request);
+        if (email != null) {
+            String result = cartService.addItem(email, cartRequest);
+            return new SuccessResponse().getMessageResponseEntity(result);
+        } else {
+            return new NotAcceptResponse().sendMessage("잘못된 접근입니다.");
+        }
+    }
+
 }

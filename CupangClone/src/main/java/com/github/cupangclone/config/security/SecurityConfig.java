@@ -44,6 +44,10 @@ public class SecurityConfig {
             "/api/users/**"
     };
 
+    private static final String[] AUTH_BUY_USER_WHITELIST = {
+            "/api/cart/**"
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, LogoutSuccessHandlerImpl logoutSuccessHandlerImpl) throws Exception {
 
@@ -51,7 +55,9 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .formLogin(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests( auth
-                    -> auth.requestMatchers(AUTH_USER_WHITELIST)
+                    -> auth.requestMatchers(AUTH_BUY_USER_WHITELIST)
+                    .hasAnyRole("USER", "ADMIN")
+                    .requestMatchers(AUTH_USER_WHITELIST)
                     .hasAnyRole("USER", "SELLER", "ADMIN")
                     .requestMatchers(AUTH_SELLER_WHITELIST)
                     .hasAnyRole("SELLER", "ADMIN")

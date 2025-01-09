@@ -25,7 +25,10 @@ import java.util.Map;
 @EnableConfigurationProperties(DataSourceProperties.class)
 @EnableJpaRepositories(
         basePackages = {"com.github.cupangclone.repository.roles", "com.github.cupangclone.repository.userPrincipal",
-                        "com.github.cupangclone.repository.userPrincipalRoles", "com.github.cupangclone.repository.items"},
+                        "com.github.cupangclone.repository.userPrincipalRoles", "com.github.cupangclone.repository.items",
+                        "com.github.cupangclone.repository.carts", "com.github.cupangclone.repository.optionType",
+                        "com.github.cupangclone.repository.options", "com.github.cupangclone.repository.itemOption",
+                        "com.github.cupangclone.repository.orders", "com.github.cupangclone.repository.payment"},
         entityManagerFactoryRef = "entityManagerFactoryBean1",
         transactionManagerRef = "tmJpa1",
         excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {})
@@ -53,7 +56,10 @@ public class JpaConfig {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
         em.setPackagesToScan("com.github.cupangclone.repository.roles", "com.github.cupangclone.repository.userPrincipal",
-                "com.github.cupangclone.repository.userPrincipalRoles", "com.github.cupangclone.repository.items");
+                "com.github.cupangclone.repository.userPrincipalRoles", "com.github.cupangclone.repository.items",
+                "com.github.cupangclone.repository.carts", "com.github.cupangclone.repository.optionType",
+                "com.github.cupangclone.repository.options", "com.github.cupangclone.repository.itemOption",
+                "com.github.cupangclone.repository.orders", "com.github.cupangclone.repository.payment");
 
         JpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(adapter);
