@@ -44,7 +44,7 @@ public class SecurityConfig {
             "/api/users/**"
     };
 
-    private static final String[] AUTH_BUY_USER_WHITELIST = {
+    private static final String[] AUTH_BY_USER_WHITELIST = {
             "/api/cart/**"
     };
 
@@ -55,7 +55,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .formLogin(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests( auth
-                    -> auth.requestMatchers(AUTH_BUY_USER_WHITELIST)
+                    -> auth.requestMatchers(AUTH_BY_USER_WHITELIST)
                     .hasAnyRole("USER", "ADMIN")
                     .requestMatchers(AUTH_USER_WHITELIST)
                     .hasAnyRole("USER", "SELLER", "ADMIN")

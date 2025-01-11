@@ -43,7 +43,7 @@ public class ItemController {
     @GetMapping("/all")
     public ResponseEntity<Message> requestAllItems(
             @RequestParam(defaultValue = "0", name = "page") int page,
-            @RequestParam(defaultValue = "5", name = "size")int size,
+            @RequestParam(defaultValue = "5", name = "size") int size,
             HttpServletRequest request) {
 
         String email = authService.blockAccessWithOnlyToken(request);

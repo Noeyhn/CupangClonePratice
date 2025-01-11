@@ -11,10 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /*
     TODO LIST : 장바구니 기본 추가 및 삭제, 수량변경, 그에따른 가격변경, 옵션 추가 삭제 변경 기능 구현
@@ -30,11 +27,29 @@ public class CartController {
     private final CartService cartService;
     private final AuthService authService;
 
+    /**
+     * 장바구니에 아이템 추가
+     */
     @PostMapping("/add")
     public ResponseEntity<Message> addItemToCart(@RequestBody CartRequest cartRequest, HttpServletRequest request) {
         String email = authService.blockAccessWithOnlyToken(request);
         if (email != null) {
             String result = cartService.addItem(email, cartRequest);
+            return new SuccessResponse().getMessageResponseEntity(result);
+        } else {
+            return new NotAcceptResponse().sendMessage("잘못된 접근입니다.");
+        }
+    }
+
+    /**
+     * 장바구니에 아이템 삭제
+     */
+    @DeleteMapping("/remove")
+    public ResponseEntity<Message> removeItemFromCart(@RequestParam("cart_id") Long cartId, HttpServletRequest request) {
+        String email = authService.blockAccessWithOnlyToken(request);
+
+        if (email != null) {
+            String result = cartService.removeItemFromCart(email, cartId);
             return new SuccessResponse().getMessageResponseEntity(result);
         } else {
             return new NotAcceptResponse().sendMessage("잘못된 접근입니다.");
