@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import java.nio.charset.StandardCharsets;
 
 public class SuccessResponse {
+
     public ResponseEntity<Message> getMessageResponseEntity(Object data) {
 
         Message message = new Message();
@@ -23,4 +24,20 @@ public class SuccessResponse {
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
 
     }
+
+
+//    public ResponseEntity<Message> getMessageResponseEntity(Object data, Long totalPages) {
+//
+//        Message message = new Message();
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+//
+//        message.setStatus(StatusEnum.OK);
+//        message.setMessage("SuccessException, totalPages = ");
+//        message.setData(data);
+//
+//        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+//
+//    }
+
 }

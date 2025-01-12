@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /*
@@ -37,6 +39,7 @@ import java.util.List;
 @RequestMapping("/api/items")
 @Slf4j
 public class ItemController {
+
     private final ItemService itemService;
     private final AuthService authService;
 
@@ -48,12 +51,22 @@ public class ItemController {
 
         String email = authService.blockAccessWithOnlyToken(request);
 
+        /*
+            TODO : 리스트 정렬기준 정하기
+         */
+
         if ( email != null ) {
 
             Page<ItemsResponse> result = itemService.getAllItems(page, size);
             List<ItemsResponse> allItems = result.getContent();
+            Integer totalPages = result.getTotalPages();
 
-            return new SuccessResponse().getMessageResponseEntity(allItems);
+            // 총 페이지 수와 페이지 리스트를 key, value 값으로 반환
+            HashMap<String, Object> data = new HashMap<>();
+            data.put("totalPages", totalPages);
+            data.put("items", allItems);
+
+            return new SuccessResponse().getMessageResponseEntity(data);
 
         } else {
             return new NotAcceptResponse().sendMessage("잘못된 접근입니다.");

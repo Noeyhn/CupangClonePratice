@@ -40,12 +40,12 @@ public class SecurityConfig {
     };
 
     private static final String[] AUTH_USER_WHITELIST = {
-            "/api/signup/resign/*", "/api/items/**", "/api/items/search/*",
+            "/api/signup/resign/*", "/api/items/**",
             "/api/users/**"
     };
 
     private static final String[] AUTH_BY_USER_WHITELIST = {
-            "/api/cart/**"
+            "/api/cart/**", "/api/payment/**"
     };
 
     @Bean

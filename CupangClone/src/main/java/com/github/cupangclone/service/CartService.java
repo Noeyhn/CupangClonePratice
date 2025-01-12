@@ -9,13 +9,16 @@ import com.github.cupangclone.repository.items.ItemsRepository;
 import com.github.cupangclone.repository.userPrincipal.UserPrincipal;
 import com.github.cupangclone.repository.userPrincipal.UserPrincipalRepository;
 import com.github.cupangclone.web.dto.carts.CartRequest;
+import com.github.cupangclone.web.dto.carts.CartResponse;
 import com.github.cupangclone.web.dto.carts.CartUpdateRequest;
 import com.github.cupangclone.web.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,8 +31,9 @@ public class CartService {
     private final CartsRepository cartsRepository;
     private final ItemOptionRepository itemOptionRepository;
 
-    /** TODO : 로그인이 아닌 다른경로로 접근시 본인확인 로직 필요
-     * AuthService에 작성? <- 생각해 볼것(하나의 메소드로 작성하여 유지보수 용이하도록 할 것)
+    /*
+        TODO : 로그인이 아닌 다른경로로 접근시 본인확인 로직 필요
+               AuthService에 작성? <- 생각해 볼것(하나의 메소드로 작성하여 유지보수 용이하도록 할 것)
      */
 
     // 고객 정보 확인 로직
@@ -53,8 +57,9 @@ public class CartService {
         // TODO : 아이템 옵션에 따라 각기 다른 상품정보로 분류 및 확인 요함
         Optional<Carts> existingCart = cartsRepository.findByUserPrincipal_UserPrincipalIdAndItems_itemIdAndItemOption_ItemOptionId(user.getUserPrincipalId(), item.getItemId(), cartRequest.getItemOptionId());
 
-        /** 장바구니에 해당 아이템이 존재하면 수량만 증가
-         *  해당 아이템이 없을 경우 장바구니에 추가
+        /*
+            장바구니에 해당 아이템이 존재하면 수량만 증가
+            해당 아이템이 없을 경우 장바구니에 추가
          */
         if ( existingCart.isPresent() ) {
 
@@ -110,8 +115,8 @@ public class CartService {
     @Transactional(transactionManager = "tmJpa1")
     public String updateItemQuantity(String email, CartUpdateRequest cartUpdateRequest) {
 
-        /**
-         * 옵션 변경에 따른 로직 필요(수량변경과 합칠지 따로 만들지 고민해보기)
+        /*
+            옵션 변경에 따른 로직 필요(수량변경과 합칠지 따로 만들지 고민해보기)
          */
 
         // 고객 확인 로직
@@ -131,6 +136,34 @@ public class CartService {
         cartsRepository.save(cartItem);
 
         return "아이템 수량이 변경되었습니다.";
+    }
+
+    // 장바구니 아이템 조회
+    public List<CartResponse> getAllCartItems(String email) {
+
+        // 고객 확인 로직
+        UserPrincipal user = findUser(email);
+
+        // 장바구니에서 아이템 조회
+        List<Carts> cartsList = cartsRepository.findByUserPrincipal_UserPrincipalId(user.getUserPrincipalId());
+
+        /*
+            TODO : 장바구니 아이템리스트 -> 페이지 로 반환
+                   또는 최근에 담은 일정 수량의 아이템 외에는 간략하게 표기할 로직 구현
+         */
+
+        if ( cartsList != null && !cartsList.isEmpty()) {
+
+            return cartsList.stream()
+                    .map( cart -> CartResponse.formCarts(cart, cart.getItems()))
+                    .toList();
+
+        } else {
+
+            return null;
+
+        }
+
     }
 
 }
