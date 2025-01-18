@@ -3,6 +3,7 @@ package com.github.cupangclone.repository.options;
 import com.github.cupangclone.repository.optionType.OptionType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -28,6 +29,14 @@ public class Options {
 
     @Column(name = "option_name", nullable = false)
     private String optionName;
+
+    @Column(name = "option_price")
+    @ColumnDefault("'0'")
+    private Long optionPrice;
+
+    @Column(name = "option_stock")
+    @ColumnDefault("'0'")
+    private Long optionStock;
 
     @Column(name = "created_at")
     @CreationTimestamp

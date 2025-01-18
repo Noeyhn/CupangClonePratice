@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,20 +25,13 @@ public class ItemOption {
     @Column(name = "item_option_id")
     private Long itemOptionId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "option_id")
-    private Options options;
+    private List<Options> options;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Items items;
-
-    @Column(name = "option_price", nullable = false)
-    private Long optionPrice;
-
-    @Column(name = "option_stock")
-    @ColumnDefault("'0'")
-    private Long optionStock;
 
     @Column(name = "created_at")
     @CreationTimestamp
