@@ -9,7 +9,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    properties:
+      hibernate:
+        #        show_sql: true
+        format_sql: true
 
   data:
     redis:
@@ -18,6 +21,10 @@ spring:
 
   jackson:
     property-naming-strategy: SNAKE_CASE
+
+logging:
+    level:
+      org.hibernate.sql: debug
 
 springdoc:
   swagger-ui:

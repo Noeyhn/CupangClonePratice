@@ -1,6 +1,7 @@
 package com.github.cupangclone.repository.itemOption;
 
 import com.github.cupangclone.repository.items.Items;
+import com.github.cupangclone.repository.optionType.OptionType;
 import com.github.cupangclone.repository.options.Options;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,9 +26,9 @@ public class ItemOption {
     @Column(name = "item_option_id")
     private Long itemOptionId;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "option_id")
-    private List<Options> options;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "option_type_id")
+    private OptionType optionType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")

@@ -31,11 +31,11 @@ public class Options {
     private String optionName;
 
     @Column(name = "option_price")
-    @ColumnDefault("'0'")
+    @ColumnDefault("0")
     private Long optionPrice;
 
     @Column(name = "option_stock")
-    @ColumnDefault("'0'")
+    @ColumnDefault("0")
     private Long optionStock;
 
     @Column(name = "created_at")

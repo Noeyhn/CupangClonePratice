@@ -1,5 +1,7 @@
 package com.github.cupangclone.service;
 
+import com.github.cupangclone.repository.itemOption.ItemOption;
+import com.github.cupangclone.repository.itemOption.ItemOptionRepository;
 import com.github.cupangclone.repository.items.Items;
 import com.github.cupangclone.repository.items.ItemsRepository;
 import com.github.cupangclone.repository.optionType.OptionType;
@@ -34,6 +36,7 @@ public class SellItemService {
     private final ItemsRepository itemsRepository;
     private final OptionTypeRepository optionTypeRepository;
     private final OptionsRepository optionsRepository;
+    private final ItemOptionRepository itemOptionRepository;
 
 
     @Transactional(transactionManager = "tmJpa1")
@@ -56,42 +59,59 @@ public class SellItemService {
 
             itemsRepository.save(items);
 
+            /*
+                아이템 옵션값이 존재할경우 옵션 DB에 저장
+
+                TODO : 옵션값 DB에 저장시 SQL문을 최소로 불러올 수 있도록 로직 수정방향 생각해보기
+                        단계별 옵션 및 옵션추가 확장성에 용이하도록 수정 요함  
+             */
             if (itemsRequest.getOption() != null) {
 
                 List<OptionRequest> optionRequests = itemsRequest.getOption().stream().toList();
 
                 List<Options> options = new ArrayList<>();
+                List<OptionType> optionTypes = new ArrayList<>();
 
                 for ( OptionRequest optionRequest : optionRequests ) {
                     List<String> optionsNames = optionRequest.getOptionName();
+                    List<Long> optionsPrices = optionRequest.getOptionPrice();
+                    List<Long> optionsStocks = optionRequest.getOptionStock();
 
                     OptionType optionType = OptionType.builder()
                             .optionTypeName(optionRequest.getOptionTypeName())
                             .build();
 
+                    optionTypeRepository.save(optionType);
+
+                    OptionType findOptionType = optionTypeRepository.findByOptionTypeName(optionRequest.getOptionTypeName());
+
+                    optionTypes.add(findOptionType);
+
+                    ItemOption itemOption = ItemOption.builder()
+                            .optionType(findOptionType)
+                            .items(items)
+                            .build();
+
+                    itemOptionRepository.save(itemOption);
+
                     for ( int i = 0; i < optionsNames.size(); i++ ) {
 
                         Options option = Options.builder()
                                 .optionName(optionsNames.get(i))
-                                .optionPrice(optionRequest.getOptionPrice().get(i))
-                                .optionStock(optionRequest.getOptionStock().get(i))
-                                .optionType(optionType)
+                                .optionPrice(optionsPrices.get(i))
+                                .optionStock(optionsStocks.get(i))
+                                .optionType(findOptionType)
                                 .build();
-
-                        log.info(option.getOptionStock().toString());
 
                         options.add(option);
                     }
 
-                    log.info(options.toString());
-
-                    optionTypeRepository.save(optionType);
                     optionsRepository.saveAll(options);
 
                 }
 
-
             }
+
 
             return true;
         } else {
